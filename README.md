@@ -1,6 +1,6 @@
 # Surpac — Drillhole to Pit Design Workflow
 
-This repository documents an end-to-end **Surpac** workflow that takes raw exploration drillhole data and develops it into a complete **open-pit mine design**. It includes a step-by-step tutorial PDF along with the underlying **Cu-Co drillhole dataset** used to build the tutorial, so that readers can replicate every step inside Surpac.
+This repository documents an end-to-end **Surpac** workflow that takes raw exploration drillhole data and develops it into a complete **open-pit mine design**. It includes a step-by-step tutorial PDF along with the underlying **Cu-Co drillhole dataset** used to build the tutorial, so that readers can replicate every step inside Surpac. In this tutorial, **grade estimation is carried out only for Total Copper (TCu)**.
 
 ## Project Overview
 
@@ -10,18 +10,20 @@ The tutorial covers the typical pipeline used in resource and reserve estimation
 
 - Importing and validating drillhole data (collar, survey, assay, and lithology tables).
 - Visualizing drillholes in 3D and creating cross-sections.
-- Compositing assays and applying geological constraints.
-- Building a block model and assigning grade attributes.
-- Performing grade estimation (e.g., inverse distance or kriging where applicable).
+- Compositing TCu assays and applying geological constraints.
+- Building a block model and assigning grade attributes for TCu.
+- Performing grade estimation for **TCu only**, using interpolation methods such as inverse distance weighting.
 - Designing pit shells, benches, ramps, and final pit limits.
 - Generating volumes, tonnages, and visual outputs for reporting.
 
+> **Note on scope of estimation:** Although the assay table contains TCu, TCo, ASCu, and ASCo values, this tutorial estimates grades for **TCu (Total Copper) only**. The other assay fields (TCo, ASCu, ASCo) are retained in the database for reference but are not interpolated into the block model.
+
 ## Repository Contents
 
-- **Surpac_Tutorial_compressed (2).pdf** — Step-by-step tutorial that walks through the full Surpac workflow from drillhole import to pit design, including screenshots and explanatory notes.
+- **Surpac_Tutorial_compressed (2).pdf** — Step-by-step tutorial that walks through the full Surpac workflow from drillhole import to pit design (with TCu grade estimation), including screenshots and explanatory notes.
 - **Collar-1.csv** — Drillhole collar table (one record per hole) with hole location and total depth.
-- **Survey-1.csv (Survey12.csv)** — Downhole survey table with azimuth and dip readings at depth intervals.
-- **Assay-1.csv** — Sample assay table with Cu and Co grades over downhole sample intervals.
+- **Survey12.csv** — Downhole survey table with azimuth and dip readings at depth intervals.
+- **Assay-1.csv** — Sample assay table with Cu and Co grades over downhole sample intervals (only TCu is used for estimation in this tutorial).
 - **Geology-1.csv** — Geological logging table assigning a stratigraphic / lithological code to each downhole interval.
 
 ## Dataset Description
@@ -51,10 +53,10 @@ Columns: `Project, hole_id, samp_id, depth_from, depth_to, TCu, TCo, ASCu, ASCo,
 
 - **samp_id** — Sample identifier.
 - **depth_from / depth_to** — Sample interval in metres downhole.
-- **TCu** — Total Copper grade (%).
-- **TCo** — Total Cobalt grade (%).
-- **ASCu** — Acid Soluble Copper grade (%).
-- **ASCo** — Acid Soluble Cobalt grade (%).
+- **TCu** — Total Copper grade (%). **This is the variable used for grade estimation in the tutorial.**
+- **TCo** — Total Cobalt grade (%). Included for reference; not estimated in this tutorial.
+- **ASCu** — Acid Soluble Copper grade (%). Included for reference; not estimated in this tutorial.
+- **ASCo** — Acid Soluble Cobalt grade (%). Included for reference; not estimated in this tutorial.
 - **Description** — Free-text sample description / notes.
 
 ### Geology table (Geology-1.csv)
@@ -74,12 +76,12 @@ The high-level workflow followed in this tutorial, using the included dataset, i
 
 1. **Drillhole Database Setup** — Import the Collar, Survey, Assay, and Geology CSV files into Surpac and validate the database.
 2. **Data Visualization** — Display drillholes in 3D, generate sections, and inspect data quality.
-3. **Compositing** — Composite Cu and Co assay data over fixed intervals for use in estimation.
+3. **Compositing** — Composite **TCu** assay data over fixed downhole intervals for use in estimation.
 4. **Geological Modeling** — Create solids/wireframes representing ore zones using the ModelStratigraphy codes.
-5. **Block Model Creation** — Build an empty block model and constrain it to the geological wireframes.
-6. **Grade Estimation** — Populate the block model with TCu, TCo (and optionally ASCu, ASCo) using interpolation methods such as inverse distance weighting.
+5. **Block Model Creation** — Build an empty block model constrained to the geological wireframes, with **TCu** defined as the grade attribute.
+6. **Grade Estimation (TCu only)** — Populate the block model with **Total Copper (TCu)** grades using an interpolation method such as inverse distance weighting. Other elements (TCo, ASCu, ASCo) are not estimated in this tutorial.
 7. **Pit Design** — Define bench heights, batter angles, berm widths, and ramp geometry to construct an open-pit design.
-8. **Reporting & Visualization** — Calculate volumes/tonnages and produce visual outputs for review.
+8. **Reporting & Visualization** — Calculate volumes/tonnages for TCu and produce visual outputs for review.
 
 ## Intended Audience
 
@@ -93,7 +95,7 @@ This material is most useful for:
 
 1. Open **Surpac_Tutorial_compressed (2).pdf** and read through the workflow.
 2. In Surpac, set up a new project and import the four CSV files as the Collar, Survey, Assay, and Geology tables of a drillhole database.
-3. Follow each step in the tutorial against the imported dataset to build the block model and pit design.
+3. Follow each step in the tutorial against the imported dataset to build the block model, estimate TCu, and produce the pit design.
 
 ## Author
 
